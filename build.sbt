@@ -15,3 +15,5 @@ libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "3.0.3"
 libraryDependencies += "com.h2database" % "h2" % "1.4.197"
 
 libraryDependencies += specs2 % Test
+
+javaOptions in Test += "-Dconfig.file=conf/test.conf"
