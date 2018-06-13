@@ -6,6 +6,9 @@ create table "people" (
   "age" int not null
 );
 
+insert into "people" values(1, 'Bob', 23);
+insert into "people" values(2, 'Rob', 21);
+
 # --- !Downs
 
 drop table "people" if exists;
