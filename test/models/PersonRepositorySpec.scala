@@ -1,52 +1,55 @@
 package models
 
-import play.api.Application
-import play.api.test.{PlaySpecification, WithApplication}
+import org.scalatestplus.play.PlaySpec
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import play.api.test.Helpers._
+import play.api.test.{Injecting, WithApplication}
 
-class PersonRepositorySpec extends PlaySpecification {
+class PersonRepositorySpec extends PlaySpec with GuiceOneAppPerTest {
 
 
   "Person repository" should {
 
-    def personRepository(implicit app: Application) = Application.instanceCache[PersonRepository].apply(app)
-
-    "create person" in new WithApplication() {
+    "create person" in new WithPersonRepository {
       val result = await(personRepository.create("James", 25))
-      result must equalTo(Person(3, "James", 25))
-
+      result mustBe Person(3, "James", 25)
     }
 
-    "get all person" in new WithApplication() {
+    "get all person" in new WithPersonRepository {
       val result = await(personRepository.list())
-      result must equalTo(Vector(Person(1, "Bob", 23), Person(2, "Rob", 21)))
+      result mustBe Vector(Person(1, "Bob", 23), Person(2, "Rob", 21))
     }
 
-    "update person" in new WithApplication() {
+    "update person" in new WithPersonRepository {
       // updating age from 23 to 18
       val person = Person(1, "Bob", 18)
       val result = await(personRepository.update(person))
-      result must equalTo(1)
+      result mustBe 1
     }
 
-    "update person who does not exist" in new WithApplication() {
+    "update person who does not exist" in new WithPersonRepository {
       // there is no person who have id 111
       val person = Person(111, "Joy", 18)
       val result = await(personRepository.update(person))
-      result must equalTo(0)
+      result mustBe 0
     }
 
-    "delete person by id" in new WithApplication() {
+    "delete person by id" in new WithPersonRepository {
       val result = await(personRepository.delete(1))
-      result must equalTo(1)
+      result mustBe 1
     }
 
 
-    "delete person by id who does not exist" in new WithApplication() {
+    "delete person by id who does not exist" in new WithPersonRepository {
       // there is no person who have id 111
       val result = await(personRepository.delete(111))
-      result must equalTo(0)
+      result mustBe 0
     }
   }
 
+}
 
+trait WithPersonRepository extends WithApplication with Injecting {
+
+  val personRepository = inject[PersonRepository]
 }
