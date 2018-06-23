@@ -32,6 +32,7 @@ dependencies {
     play "com.h2database:h2:1.4.197"
 
     playTest "com.typesafe.play:play-specs2_$scalaVersion:$playVersion"
+    playTest "org.scalatestplus.play:scalatestplus-play_$scalaVersion:3.1.2"
 }
 
 repositories {
